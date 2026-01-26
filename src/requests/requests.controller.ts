@@ -6,12 +6,12 @@ export class RequestsController {
   constructor(private readonly requestsService: RequestsService) {}
 
   @Patch(':id/accept')
-  accept(@Param('id') id: string, @Body('owner') owner: string) {
-    return this.requestsService.accept(id, owner);
+  accept(@Param('id') requestId: string, @Body('agentId') agentId: string) {
+    return this.requestsService.accept(requestId, agentId);
   }
 
   @Patch(':id/resolve')
-  resolve(@Param('id') id: string) {
-    return this.requestsService.resolve(id);
+  resolve(@Param('id') requestId: string) {
+    return this.requestsService.resolve(requestId);
   }
 }
