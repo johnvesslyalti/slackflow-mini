@@ -14,4 +14,13 @@ export class TicketsRepository {
       },
     });
   }
+
+  resolveByRequestId(requestId: string) {
+    return this.prisma.ticket.update({
+      where: { requestId },
+      data: {
+        status: 'RESOLVED',
+      },
+    });
+  }
 }

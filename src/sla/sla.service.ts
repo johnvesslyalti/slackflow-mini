@@ -74,4 +74,14 @@ export class SlaService {
       });
     }
   }
+
+  async completeByRequestId(requestId: string) {
+    const sla = await this.slaRepository.findByTicketId(requestId);
+
+    if (!sla || sla.status !== 'ACTIVE') return;
+
+    await this.slaRepository.update(sla.id, {
+      status: SLAStatus.COMPLETED,
+    });
+  }
 }

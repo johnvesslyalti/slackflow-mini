@@ -20,6 +20,15 @@ export class RequestsRepository {
     });
   }
 
+  close(requestId: string) {
+    return this.prisma.request.update({
+      where: { id: requestId },
+      data: {
+        status: 'CLOSED',
+      },
+    });
+  }
+
   markAccepted(requestId: string, agentId: string) {
     return this.prisma.request.update({
       where: { id: requestId },
