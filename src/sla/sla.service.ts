@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SlaRepository } from './sla.repository';
 import { SLA, SLAStatus } from '@prisma/client';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class SlaService {
@@ -34,6 +35,22 @@ export class SlaService {
       pausedAt: null,
       totalPausedDuration: sla.totalPaused + Math.floor(pausedDuration),
     });
+  }
+
+  @Cron('*/1 * * * * *')
+  async checkForBreaches() {
+    const activeSlas = await this.slaRepository.findActive();
+
+    for (const sla of activeSlas) {
+      const elapsedSeconds = this.getElapsed(sla);
+
+      if (elapsedSeconds >= sla.duration) {
+        await this.slaRepository.update(sla.id, {
+          status: SLAStatus.BREACHED,
+          breachedAt: new Date(),
+        })
+      }
+    }
   }
 
   private getElapsed(sla: SLA) {

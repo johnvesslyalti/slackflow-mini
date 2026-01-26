@@ -5,12 +5,15 @@ import { AppService } from './app.service';
 import { SlackModule } from './slack/slack.module';
 import { RequestsModule } from './requests/requests.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
+
     SlackModule,
     RequestsModule,
     PrismaModule,

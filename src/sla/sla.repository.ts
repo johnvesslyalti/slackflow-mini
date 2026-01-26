@@ -28,6 +28,12 @@ export class SlaRepository {
     });
   }
 
+  findActive() {
+    return this.prisma.sLA.findMany({
+      where: { status: 'ACTIVE' },
+    });
+  }
+
   update(id: string, data: any) {
     return this.prisma.sLA.update({
       where: { id },
