@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class SlaRepository {
@@ -34,7 +35,7 @@ export class SlaRepository {
     });
   }
 
-  update(id: string, data: any) {
+  update(id: string, data: Prisma.SLAUpdateInput) {
     return this.prisma.sLA.update({
       where: { id },
       data,

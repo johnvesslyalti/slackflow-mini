@@ -28,12 +28,12 @@ export class SlaService {
 
     if (!sla || sla.status !== 'PAUSED' || !sla.pausedAt) return;
 
-    const pausedDuration = Date.now() - sla.pausedAt.getTime() / 1000;
+    const pausedDuration = (Date.now() - sla.pausedAt.getTime()) / 1000;
 
     await this.slaRepository.update(sla.id, {
       status: SLAStatus.ACTIVE,
       pausedAt: null,
-      totalPausedDuration: sla.totalPaused + Math.floor(pausedDuration),
+      totalPaused: sla.totalPaused + Math.floor(pausedDuration),
     });
   }
 

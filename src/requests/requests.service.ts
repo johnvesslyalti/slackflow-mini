@@ -13,6 +13,9 @@ export class RequestsService {
     private ticketsRepo: TicketsRepository,
     private slaService: SlaService,
   ) {}
+  create(data: { customerId: string; title: string; description?: string }) {
+    return this.requestsRepo.create(data);
+  }
 
   async accept(requestId: string, agentId: string) {
     return this.prisma.$transaction(async () => {
