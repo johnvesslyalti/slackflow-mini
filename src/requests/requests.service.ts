@@ -11,7 +11,7 @@ export class RequestsService {
     private prisma: PrismaService,
     private requestsRepo: RequestsRepository,
     private ticketsRepo: TicketsRepository,
-    private slaService: SlaService
+    private slaService: SlaService,
   ) {}
 
   async accept(requestId: string, agentId: string) {
@@ -38,19 +38,18 @@ export class RequestsService {
   }
 
   async resolve(requestId: string) {
-  return this.prisma.$transaction(async () => {
-    const request = await this.requestsRepo.findById(requestId);
+    return this.prisma.$transaction(async () => {
+      const request = await this.requestsRepo.findById(requestId);
 
-    if (!request || request.status !== RequestStatus.ACCEPTED) {
-      throw new Error('Request cannot be resolved');
-    }
+      if (!request || request.status !== RequestStatus.ACCEPTED) {
+        throw new Error('Request cannot be resolved');
+      }
 
-    await this.requestsRepo.close(requestId);
+      await this.requestsRepo.close(requestId);
 
-    await this.ticketsRepo.resolveByRequestId(requestId);
+      await this.ticketsRepo.resolveByRequestId(requestId);
 
-    await this.slaService.completeByRequestId(requestId);
-  });
-}
-
+      await this.slaService.completeByRequestId(requestId);
+    });
+  }
 }
