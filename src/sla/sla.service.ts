@@ -48,7 +48,7 @@ export class SlaService {
         await this.slaRepository.update(sla.id, {
           status: SLAStatus.BREACHED,
           breachedAt: new Date(),
-        })
+        });
       }
     }
   }
