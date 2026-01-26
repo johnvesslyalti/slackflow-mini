@@ -16,6 +16,12 @@ export class SlaRepository {
     });
   }
 
+  findById(id: string) {
+    return this.prisma.sLA.findUnique({
+      where: { id },
+    });
+  }
+
   findByTicketId(ticketId: string) {
     return this.prisma.sLA.findUnique({
       where: { ticketId },
