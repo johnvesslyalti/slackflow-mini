@@ -31,8 +31,25 @@ model Ticket {
   updatedAt DateTime     @updatedAt
 
   request   Request      @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  sla       SLA?
 
   @@index([agentId])
+  @@index([status])
+}
+
+model SLA {
+  id          String    @id @default(uuid())
+  ticketId    String    @unique
+  status      SLAStatus
+  startedAt   DateTime
+  pausedAt    DateTime?
+  totalPaused Int       @default(0) // seconds
+  duration    Int       // allowed seconds
+  breachedAt  DateTime?
+  completedAt DateTime?
+
+  ticket      Ticket    @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
   @@index([status])
 }
 
@@ -46,4 +63,12 @@ enum TicketStatus {
   ACTIVE
   WAITING_ON_CUSTOMER
   RESOLVED
+}
+
+
+enum SLAStatus {
+  ACTIVE
+  PAUSED
+  BREACHED
+  COMPLETED
 }
