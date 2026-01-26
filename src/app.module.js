@@ -11,6 +11,7 @@ import { SlackModule } from './slack/slack.module';
 import { RequestsModule } from './requests/requests.module';
 import { PrismaService } from './prisma/prisma.service';
 import { TicketsModule } from './tickets/tickets.module';
+import { SlaModule } from './sla/sla.module';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
