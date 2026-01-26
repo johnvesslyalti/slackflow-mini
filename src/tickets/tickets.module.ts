@@ -4,6 +4,6 @@ import { TicketsRepository } from './tickets.repository';
 
 @Module({
   providers: [TicketsService, TicketsRepository],
-  exports: [TicketsService]
+  exports: [TicketsService],
 })
 export class TicketsModule {}

@@ -1,15 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
-import { TicketsRepository } from "src/tickets/tickets.repository";
-import { RequestsRepository } from "./requests.repository";
-import { RequestStatus } from "@prisma/client";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { TicketsRepository } from 'src/tickets/tickets.repository';
+import { RequestsRepository } from './requests.repository';
+import { RequestStatus } from '@prisma/client';
 
 @Injectable()
 export class RequestsService {
   constructor(
-    private prisma: PrismaService, 
+    private prisma: PrismaService,
     private requestsRepo: RequestsRepository,
-    private ticketsRepo: TicketsRepository
+    private ticketsRepo: TicketsRepository,
   ) {}
 
   async accept(requestId: string, agentId: string) {
@@ -28,10 +28,10 @@ export class RequestsService {
 
       const ticket = await this.ticketsRepo.createFromRequest(
         requestId,
-        agentId
+        agentId,
       );
 
       return ticket;
-    })
+    });
   }
 }

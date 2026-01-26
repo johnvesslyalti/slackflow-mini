@@ -4,6 +4,6 @@ import { SlaRepository } from './sla.repository';
 
 @Module({
   providers: [SlaService, SlaRepository],
-  exports: [SlaService]
+  exports: [SlaService],
 })
 export class SlaModule {}

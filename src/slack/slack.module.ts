@@ -7,6 +7,6 @@ import { RequestsModule } from '../requests/requests.module';
 @Module({
   imports: [RequestsModule],
   controllers: [SlackController],
-  providers: [SlackService]
+  providers: [SlackService],
 })
 export class SlackModule {}

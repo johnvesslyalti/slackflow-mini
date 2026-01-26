@@ -10,4 +10,3 @@ import { RequestsRepository } from './requests.repository';
   providers: [RequestsService, RequestsRepository],
 })
 export class RequestsModule {}
-

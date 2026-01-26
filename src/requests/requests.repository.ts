@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class RequestsRepository {
@@ -11,19 +11,15 @@ export class RequestsRepository {
     });
   }
 
-  create(data: {
-    customerId: string;
-    title: string;
-    description?: string
-  }) {
+  create(data: { customerId: string; title: string; description?: string }) {
     return this.prisma.request.create({
-        data: {
-            ...data,
-            status: 'OPEN'
-        }
-    })
+      data: {
+        ...data,
+        status: 'OPEN',
+      },
+    });
   }
-  
+
   markAccepted(requestId: string, agentId: string) {
     return this.prisma.request.update({
       where: { id: requestId },

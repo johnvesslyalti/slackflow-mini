@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TicketsRepository {
@@ -10,8 +10,8 @@ export class TicketsRepository {
       data: {
         requestId,
         agentId,
-        status: 'ACTIVE'
-      }
-    })
+        status: 'ACTIVE',
+      },
+    });
   }
 }
