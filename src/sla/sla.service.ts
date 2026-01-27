@@ -54,7 +54,7 @@ export class SlaService {
   }
 
   private getElapsed(sla: SLA) {
-    const now = Date.now();
+    const now = sla.completedAt ? sla.completedAt.getTime() : Date.now();
     const started = sla.startedAt.getTime();
     const paused = sla.totalPaused * 1000;
 
