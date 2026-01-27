@@ -19,4 +19,9 @@ export class TicketsService {
 
     return ticket;
   }
+
+  async resolveByRequestId(requestId: string) {
+    await this.ticketRepository.resolveByRequestId(requestId);
+    await this.slaService.completeByRequestId(requestId);
+  }
 }

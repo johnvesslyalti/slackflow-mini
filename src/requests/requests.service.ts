@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { TicketsRepository } from 'src/tickets/tickets.repository';
+import { TicketsService } from 'src/tickets/tickets.service';
 import { RequestsRepository } from './requests.repository';
 import { RequestStatus } from '@prisma/client';
 import { SlaService } from 'src/sla/sla.service';
@@ -10,8 +10,8 @@ export class RequestsService {
   constructor(
     private prisma: PrismaService,
     private requestsRepo: RequestsRepository,
-    private ticketsRepo: TicketsRepository,
-    private slaService: SlaService,
+    private ticketsService: TicketsService,
+    private slaService: SlaService
   ) {}
   create(data: { customerId: string; title: string; description?: string }) {
     return this.requestsRepo.create(data);
@@ -31,7 +31,7 @@ export class RequestsService {
 
       await this.requestsRepo.markAccepted(requestId, agentId);
 
-      const ticket = await this.ticketsRepo.createFromRequest(
+      const ticket = await this.ticketsService.createFromRequest(
         requestId,
         agentId,
       );
@@ -50,7 +50,7 @@ export class RequestsService {
 
       await this.requestsRepo.close(requestId);
 
-      await this.ticketsRepo.resolveByRequestId(requestId);
+      await this.ticketsService.resolveByRequestId(requestId);
 
       await this.slaService.completeByRequestId(requestId);
     });
