@@ -1,6 +1,10 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { RequestsService } from 'src/requests/requests.service';
-import { CreateRequestDto } from './slack.dto';
+import {
+  CreateRequestDto,
+  AcceptRequestDto,
+  ResolveRequestDto,
+} from './slack.dto';
 
 @Controller('slack')
 export class SlackController {
@@ -12,14 +16,14 @@ export class SlackController {
   }
 
   @Post('/accept')
-  async acceptRequest(@Body() body: any) {
+  async acceptRequest(@Body() body: AcceptRequestDto) {
     const { requestId, agentId } = body;
 
     return this.requestsService.accept(requestId, agentId);
   }
 
   @Post('/resolve')
-  async resolveRequest(@Body() body: any) {
+  async resolveRequest(@Body() body: ResolveRequestDto) {
     const { requestId } = body;
 
     return this.requestsService.resolve(requestId);
