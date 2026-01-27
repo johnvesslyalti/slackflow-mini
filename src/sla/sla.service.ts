@@ -82,6 +82,7 @@ export class SlaService {
 
     await this.slaRepository.update(sla.id, {
       status: SLAStatus.COMPLETED,
+      completedAt: new Date(),
     });
   }
 }
