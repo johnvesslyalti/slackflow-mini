@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SlaRepository } from './sla.repository';
-import { SLA, SLAStatus } from '@prisma/client';
+import { SLA, SlaStatus } from '@prisma/client';
 import { Cron } from '@nestjs/schedule';
 
 @Injectable()
