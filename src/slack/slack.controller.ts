@@ -1,13 +1,27 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { SlackService } from './slack.service';
+import { RequestsService } from 'src/requests/requests.service';
 import { CreateRequestDto } from './slack.dto';
 
 @Controller('slack')
 export class SlackController {
-  constructor(private readonly slackService: SlackService) {}
+  constructor(private readonly requestsService: RequestsService) {}
 
-  @Post('command')
-  handleCommand(@Body() body: CreateRequestDto) {
-    return this.slackService.handleCommand(body);
+  @Post('/request')
+  async createRequest(@Body() body: CreateRequestDto) {
+    return this.requestsService.create(body);
+  }
+
+  @Post('/accept')
+  async acceptRequest(@Body() body: any) {
+    const { requestId, agentId } = body;
+
+    return this.requestsService.accept(requestId, agentId);
+  }
+
+  @Post('/resolve')
+  async resolveRequest(@Body() body: any) {
+    const { requestId } = body;
+
+    return this.requestsService.resolve(requestId);
   }
 }
