@@ -7,10 +7,7 @@ describe('SlaService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        SlaService,
-        { provide: SlaRepository, useValue: {} },
-      ],
+      providers: [SlaService, { provide: SlaRepository, useValue: {} }],
     }).compile();
 
     service = module.get<SlaService>(SlaService);
