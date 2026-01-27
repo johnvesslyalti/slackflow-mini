@@ -75,8 +75,8 @@ export class SlaService {
     }
   }
 
-  async completeByRequestId(requestId: string) {
-    const sla = await this.slaRepository.findByTicketId(requestId);
+  async completeByTicketId(ticketId: string) {
+    const sla = await this.slaRepository.findByTicketId(ticketId);
 
     if (!sla || sla.status !== 'ACTIVE') return;
 

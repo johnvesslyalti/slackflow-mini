@@ -8,7 +8,7 @@ import { SlaService } from 'src/sla/sla.service';
 @Module({
   imports: [TicketsModule],
   controllers: [RequestsController],
-  providers: [RequestsService, RequestsRepository, SlaService],
+  providers: [RequestsService, RequestsRepository],
   exports: [RequestsService],
 })
 export class RequestsModule {}

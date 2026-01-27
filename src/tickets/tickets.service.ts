@@ -21,7 +21,7 @@ export class TicketsService {
   }
 
   async resolveByRequestId(requestId: string) {
-    await this.ticketRepository.resolveByRequestId(requestId);
-    await this.slaService.completeByRequestId(requestId);
+    const ticket = await this.ticketRepository.resolveByRequestId(requestId);
+    await this.slaService.completeByTicketId(ticket.id);
   }
 }
