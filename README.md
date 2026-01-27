@@ -74,3 +74,15 @@ SlackFlow Mini is a NestJS-based backend application designed to manage support 
 -   **Linting**: `npm run lint`
 -   **Formatting**: `npm run format`
 -   **Testing**: `npm run test`
+
+## Failure Modes Considered
+
+- Concurrent request acceptance by multiple agents
+- Duplicate Slack events due to retries
+- Partial failures during request resolution
+- SLA drift caused by delayed background jobs
+
+The system relies on database constraints, transactions,
+and timestamp-based calculations to remain correct
+under these conditions.
+
