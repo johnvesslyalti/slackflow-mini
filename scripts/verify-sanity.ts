@@ -5,7 +5,7 @@ import { RequestsService } from '../src/requests/requests.service';
 import { SlaService } from '../src/sla/sla.service';
 import { TicketsService } from '../src/tickets/tickets.service';
 import { PrismaService } from '../src/prisma/prisma.service';
-import { RequestStatus, TicketStatus, SLAStatus } from '@prisma/client';
+import { RequestStatus, TicketStatus, SlaStatus } from '@prisma/client';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -33,7 +33,7 @@ async function bootstrap() {
   
   // 3. Verify SLA Start
   let sla = await prisma.sLA.findUnique({ where: { ticketId: ticket.id } });
-  if (sla?.status !== SLAStatus.ACTIVE) throw new Error('SLA should be ACTIVE');
+  if (!sla || sla.status !== SlaStatus.ACTIVE) throw new Error('SLA should be ACTIVE');
   console.log('   - SLA started');
 
   // --- SLA DEEP DIVE ---
@@ -46,7 +46,7 @@ async function bootstrap() {
   await slaService.pause(ticket.id); 
   
   sla = await prisma.sLA.findUnique({ where: { ticketId: ticket.id } });
-  if (sla?.status !== SLAStatus.PAUSED) throw new Error('SLA should be PAUSED');
+  if (!sla || sla.status !== SlaStatus.PAUSED) throw new Error('SLA should be PAUSED');
   if (!sla.pausedAt) throw new Error('SLA pausedAt should be set');
   console.log('   - SLA paused');
 
@@ -56,7 +56,7 @@ async function bootstrap() {
   await slaService.resume(ticket.id);
 
   sla = await prisma.sLA.findUnique({ where: { ticketId: ticket.id } });
-  if (sla?.status !== SLAStatus.ACTIVE) throw new Error('SLA should be ACTIVE');
+  if (!sla || sla.status !== SlaStatus.ACTIVE) throw new Error('SLA should be ACTIVE');
   if (sla.pausedAt !== null) throw new Error('SLA pausedAt should be null');
   if (sla.totalPaused < 1) throw new Error('SLA totalPaused should be > 0');
   console.log(`   - SLA resumed (Paused for ${sla.totalPaused}s)`);
@@ -75,7 +75,7 @@ async function bootstrap() {
   await slaService.checkForBreaches();
   
   sla = await prisma.sLA.findUnique({ where: { ticketId: ticket.id } });
-  if (sla?.status !== SLAStatus.BREACHED) throw new Error('SLA should be BREACHED');
+  if (!sla || sla.status !== SlaStatus.BREACHED) throw new Error('SLA should be BREACHED');
   console.log('   - SLA breach detected correctly');
 
   // --- END DEEP DIVE ---

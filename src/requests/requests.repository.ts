@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { RequestStatus } from '@prisma/client';
 
 @Injectable()
 export class RequestsRepository {
@@ -15,7 +16,7 @@ export class RequestsRepository {
     return this.prisma.request.create({
       data: {
         ...data,
-        status: 'OPEN',
+        status: RequestStatus.OPEN,
       },
     });
   }
@@ -24,7 +25,7 @@ export class RequestsRepository {
     return this.prisma.request.update({
       where: { id: requestId },
       data: {
-        status: 'CLOSED',
+        status: RequestStatus.CLOSED,
       },
     });
   }
@@ -33,7 +34,7 @@ export class RequestsRepository {
     return this.prisma.request.update({
       where: { id: requestId },
       data: {
-        status: 'ACCEPTED',
+        status: RequestStatus.ACCEPTED,
         agentId,
       },
     });

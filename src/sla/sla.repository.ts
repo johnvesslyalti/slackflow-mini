@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, SlaStatus } from '@prisma/client';
 
 @Injectable()
 export class SlaRepository {
@@ -11,7 +11,7 @@ export class SlaRepository {
       data: {
         ticketId,
         duration,
-        status: 'ACTIVE',
+        status: SlaStatus.ACTIVE,
         startedAt: new Date(),
       },
     });
@@ -31,7 +31,7 @@ export class SlaRepository {
 
   findActive() {
     return this.prisma.sLA.findMany({
-      where: { status: 'ACTIVE' },
+      where: { status: SlaStatus.ACTIVE },
     });
   }
 

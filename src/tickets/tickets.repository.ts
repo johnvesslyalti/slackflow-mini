@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { TicketStatus } from '@prisma/client';
 
 @Injectable()
 export class TicketsRepository {
@@ -10,7 +11,7 @@ export class TicketsRepository {
       data: {
         requestId,
         agentId,
-        status: 'ACTIVE',
+        status: TicketStatus.ACTIVE,
       },
     });
   }
@@ -19,7 +20,7 @@ export class TicketsRepository {
     return this.prisma.ticket.update({
       where: { requestId },
       data: {
-        status: 'RESOLVED',
+        status: TicketStatus.RESOLVED,
       },
     });
   }

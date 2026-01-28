@@ -1,5 +1,0 @@
-export enum TicketStatus {
-  ACTIVE = 'ACTIVE',
-  WAITING_ON_CUSTOMER = 'WAITING_ON_CUSTOMER',
-  RESOLVED = 'RESOLVED',
-}

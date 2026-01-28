@@ -15,10 +15,10 @@ export class SlaService {
   async pause(ticketId: string) {
     const sla = await this.slaRepository.findByTicketId(ticketId);
 
-    if (!sla || sla.status !== 'ACTIVE') return;
+    if (!sla || sla.status !== SlaStatus.ACTIVE) return;
 
     await this.slaRepository.update(sla.id, {
-      status: SLAStatus.PAUSED,
+      status: SlaStatus.PAUSED,
       pausedAt: new Date(),
     });
   }
@@ -26,12 +26,12 @@ export class SlaService {
   async resume(ticketId: string) {
     const sla = await this.slaRepository.findByTicketId(ticketId);
 
-    if (!sla || sla.status !== 'PAUSED' || !sla.pausedAt) return;
+    if (!sla || sla.status !== SlaStatus.PAUSED || !sla.pausedAt) return;
 
     const pausedDuration = (Date.now() - sla.pausedAt.getTime()) / 1000;
 
     await this.slaRepository.update(sla.id, {
-      status: SLAStatus.ACTIVE,
+      status: SlaStatus.ACTIVE,
       pausedAt: null,
       totalPaused: sla.totalPaused + Math.floor(pausedDuration),
     });
@@ -46,7 +46,7 @@ export class SlaService {
 
       if (elapsedSeconds >= sla.duration) {
         await this.slaRepository.update(sla.id, {
-          status: SLAStatus.BREACHED,
+          status: SlaStatus.BREACHED,
           breachedAt: new Date(),
         });
       }
@@ -64,13 +64,13 @@ export class SlaService {
   async breachCheck(slaId: string) {
     const sla = await this.slaRepository.findById(slaId);
 
-    if (!sla || sla.status !== 'ACTIVE') return;
+    if (!sla || sla.status !== SlaStatus.ACTIVE) return;
 
     const elapsed = this.getElapsed(sla);
 
     if (elapsed >= sla.duration) {
       await this.slaRepository.update(slaId, {
-        status: SLAStatus.BREACHED,
+        status: SlaStatus.BREACHED,
       });
     }
   }
@@ -78,10 +78,10 @@ export class SlaService {
   async completeByTicketId(ticketId: string) {
     const sla = await this.slaRepository.findByTicketId(ticketId);
 
-    if (!sla || sla.status !== 'ACTIVE') return;
+    if (!sla || sla.status !== SlaStatus.ACTIVE) return;
 
     await this.slaRepository.update(sla.id, {
-      status: SLAStatus.COMPLETED,
+      status: SlaStatus.COMPLETED,
       completedAt: new Date(),
     });
   }
