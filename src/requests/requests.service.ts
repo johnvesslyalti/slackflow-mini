@@ -16,8 +16,8 @@ export class RequestsService {
   }
 
   async accept(requestId: string, agentId: string) {
-    return this.prisma.$transaction(async () => {
-      const request = await this.requestsRepo.findById(requestId);
+    return this.prisma.$transaction(async (tx) => {
+      const request = await this.requestsRepo.findById(requestId, tx);
 
       if (!request) {
         throw new Error('Request not found');
@@ -27,11 +27,12 @@ export class RequestsService {
         throw new Error('Request already accepted or closed');
       }
 
-      await this.requestsRepo.markAccepted(requestId, agentId);
+      await this.requestsRepo.markAccepted(requestId, agentId, tx);
 
       const ticket = await this.ticketsService.createFromRequest(
         requestId,
         agentId,
+        tx,
       );
 
       return ticket;
@@ -39,16 +40,16 @@ export class RequestsService {
   }
 
   async resolve(requestId: string) {
-    return this.prisma.$transaction(async () => {
-      const request = await this.requestsRepo.findById(requestId);
+    return this.prisma.$transaction(async (tx) => {
+      const request = await this.requestsRepo.findById(requestId, tx);
 
       if (!request || request.status !== RequestStatus.ACCEPTED) {
         throw new Error('Request cannot be resolved');
       }
 
-      await this.requestsRepo.close(requestId);
+      await this.requestsRepo.close(requestId, tx);
 
-      await this.ticketsService.resolveByRequestId(requestId);
+      await this.ticketsService.resolveByRequestId(requestId, tx);
     });
   }
 }

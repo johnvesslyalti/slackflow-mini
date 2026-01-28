@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { RequestStatus } from '@prisma/client';
+import { RequestStatus, Prisma } from '@prisma/client';
 
 @Injectable()
 export class RequestsRepository {
   constructor(private prisma: PrismaService) {}
 
-  findById(id: string) {
-    return this.prisma.request.findUnique({
+  findById(id: string, tx?: Prisma.TransactionClient) {
+    const prisma = tx || this.prisma;
+    return prisma.request.findUnique({
       where: { id },
     });
   }
@@ -21,8 +22,9 @@ export class RequestsRepository {
     });
   }
 
-  close(requestId: string) {
-    return this.prisma.request.update({
+  close(requestId: string, tx?: Prisma.TransactionClient) {
+    const prisma = tx || this.prisma;
+    return prisma.request.update({
       where: { id: requestId },
       data: {
         status: RequestStatus.CLOSED,
@@ -30,8 +32,13 @@ export class RequestsRepository {
     });
   }
 
-  markAccepted(requestId: string, agentId: string) {
-    return this.prisma.request.update({
+  markAccepted(
+    requestId: string,
+    agentId: string,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const prisma = tx || this.prisma;
+    return prisma.request.update({
       where: { id: requestId },
       data: {
         status: RequestStatus.ACCEPTED,

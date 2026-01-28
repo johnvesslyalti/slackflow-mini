@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { SlaRepository } from './sla.repository';
-import { SLA, SlaStatus } from '@prisma/client';
+import { SLA, SlaStatus, Prisma } from '@prisma/client';
 import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class SlaService {
   constructor(private slaRepository: SlaRepository) {}
 
-  start(ticketId: string) {
+  start(ticketId: string, tx?: Prisma.TransactionClient) {
     const DEFAULT_DURATION = 30 * 60;
-    return this.slaRepository.createForTicket(ticketId, DEFAULT_DURATION);
+    return this.slaRepository.createForTicket(ticketId, DEFAULT_DURATION, tx);
   }
 
   async pause(ticketId: string) {
@@ -75,14 +75,18 @@ export class SlaService {
     }
   }
 
-  async completeByTicketId(ticketId: string) {
-    const sla = await this.slaRepository.findByTicketId(ticketId);
+  async completeByTicketId(ticketId: string, tx?: Prisma.TransactionClient) {
+    const sla = await this.slaRepository.findByTicketId(ticketId, tx);
 
     if (!sla || sla.status !== SlaStatus.ACTIVE) return;
 
-    await this.slaRepository.update(sla.id, {
-      status: SlaStatus.COMPLETED,
-      completedAt: new Date(),
-    });
+    await this.slaRepository.update(
+      sla.id,
+      {
+        status: SlaStatus.COMPLETED,
+        completedAt: new Date(),
+      },
+      tx,
+    );
   }
 }

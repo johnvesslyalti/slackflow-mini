@@ -6,8 +6,13 @@ import { Prisma, SlaStatus } from '@prisma/client';
 export class SlaRepository {
   constructor(private prisma: PrismaService) {}
 
-  createForTicket(ticketId: string, duration: number) {
-    return this.prisma.sLA.create({
+  createForTicket(
+    ticketId: string,
+    duration: number,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const prisma = tx || this.prisma;
+    return prisma.sLA.create({
       data: {
         ticketId,
         duration,
@@ -23,8 +28,9 @@ export class SlaRepository {
     });
   }
 
-  findByTicketId(ticketId: string) {
-    return this.prisma.sLA.findUnique({
+  findByTicketId(ticketId: string, tx?: Prisma.TransactionClient) {
+    const prisma = tx || this.prisma;
+    return prisma.sLA.findUnique({
       where: { ticketId },
     });
   }
@@ -35,8 +41,13 @@ export class SlaRepository {
     });
   }
 
-  update(id: string, data: Prisma.SLAUpdateInput) {
-    return this.prisma.sLA.update({
+  update(
+    id: string,
+    data: Prisma.SLAUpdateInput,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const prisma = tx || this.prisma;
+    return prisma.sLA.update({
       where: { id },
       data,
     });
